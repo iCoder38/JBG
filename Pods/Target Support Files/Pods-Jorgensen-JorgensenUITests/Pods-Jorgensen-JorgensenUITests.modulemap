@@ -1,0 +1,6 @@
+framework module Pods_Jorgensen_JorgensenUITests {
+  umbrella header "Pods-Jorgensen-JorgensenUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

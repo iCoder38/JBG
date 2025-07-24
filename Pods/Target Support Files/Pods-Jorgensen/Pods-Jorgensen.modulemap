@@ -1,0 +1,6 @@
+framework module Pods_Jorgensen {
+  umbrella header "Pods-Jorgensen-umbrella.h"
+
+  export *
+  module * { export * }
+}
