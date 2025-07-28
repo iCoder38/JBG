@@ -34,7 +34,7 @@ let staticBanners: [StaticBanner] = [
     StaticBanner(imageName: "slider1", name: "JBG Clinic Care", link: "https://jorgensenbrooks.com/jbg-clinical-care/"),
     StaticBanner(imageName: "slider2", name: "JBG Personal Care", link: "https://jorgensenbrooks.com/jbg-personal-care/"),
     StaticBanner(imageName: "slider3", name: "JBG Employer Care", link: "https://jorgensenbrooks.com/jbg-employer-care/"),
-    StaticBanner(imageName: "slider4", name: "Access for All Services", link: "https://jorgensenbrooks.com/contact/")
+    StaticBanner(imageName: "slider4", name: "Non-Emergency Feedback", link: "https://jorgensenbrooks.com/contact/")
 ]
 
 
@@ -98,6 +98,12 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             navigationBar.backgroundColor = NAVIGATION_BACKGROUND_COLOR
         }
     }
+    @IBOutlet weak var headerBar:UIView! {
+        didSet {
+            headerBar.layer.cornerRadius = 8
+            headerBar.clipsToBounds = true
+        }
+    }
     @IBOutlet weak var sliderView:UIView! {
         didSet {
             sliderView.backgroundColor = UIColor.clear
@@ -112,7 +118,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     
     @IBOutlet weak var btnPhoneNumber:UIButton! {
         didSet {
-            btnPhoneNumber.setTitle("888-520-5400", for: .normal)
+            btnPhoneNumber.setTitle("Toll-free number: 888-520-5400", for: .normal)
             btnPhoneNumber.addTarget(self, action: #selector(phoneNumberClickMethod), for: .touchUpInside)
         }
     }
@@ -249,7 +255,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         
         // Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(lableChange), userInfo: nil, repeats: true)
         
-        // self.setupStaticSliderView()
+         
         
         self.setUpLsitData()
         
@@ -262,11 +268,13 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         let itemWidth = staticSliderView.frame.width
         let height = staticSliderView.frame.height
 
+        // ScrollView
         let scrollView = UIScrollView(frame: staticSliderView.bounds)
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.clipsToBounds = true
         scrollView.layer.cornerRadius = 8
+        scrollView.tag = 999 // to access later
         staticSliderView.addSubview(scrollView)
 
         for (index, banner) in staticBanners.enumerated() {
@@ -285,9 +293,10 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             let label = UILabel(frame: CGRect(x: 0, y: height - labelHeight, width: itemWidth, height: labelHeight))
             label.backgroundColor = UIColor.black.withAlphaComponent(0.7)
             label.textColor = .white
-            label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+            label.font = UIFont.boldSystemFont(ofSize: 16)
             label.textAlignment = .center
-            label.text = banner.name
+            label.text = banner.name.uppercased()
+
 
             let tap = UITapGestureRecognizer(target: self, action: #selector(staticBannerTapped(_:)))
             imageView.addGestureRecognizer(tap)
@@ -298,7 +307,44 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         }
 
         scrollView.contentSize = CGSize(width: CGFloat(staticBanners.count) * itemWidth, height: height)
+
+        // Add left arrow
+        let leftButton = UIButton(type: .custom)
+        leftButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        leftButton.tintColor = .white
+        leftButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        leftButton.layer.cornerRadius = 16
+        leftButton.frame = CGRect(x: 8, y: (height - 32) / 2, width: 32, height: 32)
+        leftButton.addTarget(self, action: #selector(scrollLeft), for: .touchUpInside)
+        staticSliderView.addSubview(leftButton)
+
+        // Add right arrow
+        let rightButton = UIButton(type: .custom)
+        rightButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        rightButton.tintColor = .white
+        rightButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        rightButton.layer.cornerRadius = 16
+        rightButton.frame = CGRect(x: itemWidth - 40, y: (height - 32) / 2, width: 32, height: 32)
+        rightButton.addTarget(self, action: #selector(scrollRight), for: .touchUpInside)
+        staticSliderView.addSubview(rightButton)
     }
+    @objc func scrollLeft() {
+        guard let scrollView = staticSliderView.viewWithTag(999) as? UIScrollView else { return }
+        let currentOffset = scrollView.contentOffset.x
+        let width = scrollView.frame.width
+        let newOffset = max(currentOffset - width, 0)
+        scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: true)
+    }
+
+    @objc func scrollRight() {
+        guard let scrollView = staticSliderView.viewWithTag(999) as? UIScrollView else { return }
+        let currentOffset = scrollView.contentOffset.x
+        let width = scrollView.frame.width
+        let maxOffset = scrollView.contentSize.width - width
+        let newOffset = min(currentOffset + width, maxOffset)
+        scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: true)
+    }
+
 
 
 

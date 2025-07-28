@@ -22,6 +22,13 @@ class AgingDashboard: UIViewController {
             navigationBar.backgroundColor = NAVIGATION_BACKGROUND_COLOR
         }
     }
+    
+    @IBOutlet weak var headerBar:UIView! {
+        didSet {
+            headerBar.layer.cornerRadius = 8
+            headerBar.clipsToBounds = true
+        }
+    }
 
     @IBOutlet weak var iconImageview:UIImageView! {
         didSet {
