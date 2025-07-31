@@ -74,8 +74,8 @@
 		A24ECC962553F18000AC9C91 /* slide6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A24ECC8C2553F17E00AC9C91 /* slide6.jpg */; };
 		A251BD5B2565049E007DA40D /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = A251BD592565049C007DA40D /* previous.png */; };
 		A27694682556834A0037A5E1 /* prev.png in Resources */ = {isa = PBXBuildFile; fileRef = A2769466255683490037A5E1 /* prev.png */; };
-		A2873B652552AE6F0084C309 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2873B642552AE6E0084C309 /* GoogleService-Info.plist */; };
 		A2A7ADA2255124C100490D20 /* EmpolyeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A7ADA1255124C100490D20 /* EmpolyeViewController.swift */; };
+		B90727222E3B585700511577 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B90727212E3B585700511577 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,9 +175,10 @@
 		A24ECC8C2553F17E00AC9C91 /* slide6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = slide6.jpg; sourceTree = "<group>"; };
 		A251BD592565049C007DA40D /* previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous.png; sourceTree = "<group>"; };
 		A2769466255683490037A5E1 /* prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prev.png; sourceTree = "<group>"; };
-		A2873B642552AE6E0084C309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2A7ADA1255124C100490D20 /* EmpolyeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmpolyeViewController.swift; sourceTree = "<group>"; };
 		A5BF79B757FF224E53E8954B /* Pods-JorgensenTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JorgensenTests.debug.xcconfig"; path = "Target Support Files/Pods-JorgensenTests/Pods-JorgensenTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B907271E2E3B55EF00511577 /* Jorgensen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Jorgensen.entitlements; sourceTree = "<group>"; };
+		B90727212E3B585700511577 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB540AE3CC785051821E327F /* Pods_Jorgensen_JorgensenUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jorgensen_JorgensenUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD4484E07CB82D94FF08C17B /* Pods-JorgensenTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JorgensenTests.release.xcconfig"; path = "Target Support Files/Pods-JorgensenTests/Pods-JorgensenTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -388,7 +389,7 @@
 		185EEDD12501149E0016A7A4 = {
 			isa = PBXGroup;
 			children = (
-				A2873B642552AE6E0084C309 /* GoogleService-Info.plist */,
+				B90727212E3B585700511577 /* GoogleService-Info.plist */,
 				A24ECC852553F17A00AC9C91 /* slide1.jpg */,
 				A24ECC8A2553F17C00AC9C91 /* slide2.jpg */,
 				158E238226CE897100D7BD2B /* next.png */,
@@ -422,6 +423,7 @@
 		185EEDDC2501149E0016A7A4 /* Jorgensen */ = {
 			isa = PBXGroup;
 			children = (
+				B907271E2E3B55EF00511577 /* Jorgensen.entitlements */,
 				185EEE132501151B0016A7A4 /* ThirdParty */,
 				185EEE10250114CA0016A7A4 /* Controller */,
 				185EEDDD2501149E0016A7A4 /* AppDelegate.swift */,
@@ -741,11 +743,11 @@
 			files = (
 				185EEDEA250114A30016A7A4 /* LaunchScreen.storyboard in Resources */,
 				185EEDE7250114A30016A7A4 /* Assets.xcassets in Resources */,
+				B90727222E3B585700511577 /* GoogleService-Info.plist in Resources */,
 				A24ECC8E2553F18000AC9C91 /* slide4.jpg in Resources */,
 				A24ECC942553F18000AC9C91 /* slide2.jpg in Resources */,
 				A24ECC912553F18000AC9C91 /* slide3.jpg in Resources */,
 				151FD9FE26C695E500C7E0E9 /* slide7.jpg in Resources */,
-				A2873B652552AE6F0084C309 /* GoogleService-Info.plist in Resources */,
 				A24ECC922553F18000AC9C91 /* slide5.jpg in Resources */,
 				A24ECC962553F18000AC9C91 /* slide6.jpg in Resources */,
 				52FC60632548504700DDF950 /* CustomProgressViewController.xib in Resources */,
@@ -1104,6 +1106,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Jorgensen/Jorgensen.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
@@ -1135,6 +1138,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Jorgensen/Jorgensen.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;

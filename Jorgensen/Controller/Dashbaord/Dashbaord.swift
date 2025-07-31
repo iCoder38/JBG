@@ -45,8 +45,7 @@ struct BannerModel {
     let link: String
 }
 
-class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
-{
+class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate {
     
     var imageArr = [UIImage.init(named: "slide1.jpg"),
                     UIImage.init(named: "slide2.jpg"),
@@ -66,12 +65,12 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     
     
     var linkArr = ["https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_cr=100637",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_cr=99733",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_cr=100056",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100556",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100557",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100423",
-        "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100421"]
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_cr=99733",
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_cr=100056",
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100556",
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100557",
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100423",
+                   "https://www.advantageengagement.com/p_content_detail.php?id_division=d00&id_module=m000&id_element=001&id_cr=100421"]
     
     
     var descArr = ["Immunization Awareness Month is highlighted in August.",
@@ -131,14 +130,14 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     }
     
     var scrollView: UIScrollView!
-        var bannerTimer: Timer?
-        var banners: [BannerModel] = []
-        var currentIndex: Int = 0
+    var bannerTimer: Timer?
+    var banners: [BannerModel] = []
+    var currentIndex: Int = 0
     
     @objc func lableChange()
     {
         
-       
+        
         if j<titleArr.count
         {
             self.titlelabel.text=titleArr[j]
@@ -158,7 +157,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     
     @objc func imageChange()
     {
-       
+        
         
         if i<imageArr.count{
             
@@ -185,7 +184,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     }
     
     @IBOutlet weak var chatBack:UIButton!
-        {
+    {
         didSet {
             chatBack.addTarget(self, action: #selector(chatClickMethod), for: .touchUpInside)
         }
@@ -255,7 +254,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         
         // Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(lableChange), userInfo: nil, repeats: true)
         
-         
+        
         
         self.setUpLsitData()
         
@@ -264,10 +263,10 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
     
     func setupStaticSliderView() {
         staticSliderView.subviews.forEach { $0.removeFromSuperview() }
-
+        
         let itemWidth = staticSliderView.frame.width
         let height = staticSliderView.frame.height
-
+        
         // ScrollView
         let scrollView = UIScrollView(frame: staticSliderView.bounds)
         scrollView.isPagingEnabled = true
@@ -276,19 +275,19 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         scrollView.layer.cornerRadius = 8
         scrollView.tag = 999 // to access later
         staticSliderView.addSubview(scrollView)
-
+        
         for (index, banner) in staticBanners.enumerated() {
             let originX = CGFloat(index) * itemWidth
             let container = UIView(frame: CGRect(x: originX, y: 0, width: itemWidth, height: height))
             container.clipsToBounds = true
-
+            
             let imageView = UIImageView(frame: container.bounds)
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.isUserInteractionEnabled = true
             imageView.tag = index
             imageView.image = UIImage(named: banner.imageName)
-
+            
             let labelHeight: CGFloat = 28
             let label = UILabel(frame: CGRect(x: 0, y: height - labelHeight, width: itemWidth, height: labelHeight))
             label.backgroundColor = UIColor.black.withAlphaComponent(0.7)
@@ -296,18 +295,18 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             label.font = UIFont.boldSystemFont(ofSize: 16)
             label.textAlignment = .center
             label.text = banner.name.uppercased()
-
-
+            
+            
             let tap = UITapGestureRecognizer(target: self, action: #selector(staticBannerTapped(_:)))
             imageView.addGestureRecognizer(tap)
-
+            
             container.addSubview(imageView)
             container.addSubview(label)
             scrollView.addSubview(container)
         }
-
+        
         scrollView.contentSize = CGSize(width: CGFloat(staticBanners.count) * itemWidth, height: height)
-
+        
         // Add left arrow
         let leftButton = UIButton(type: .custom)
         leftButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
@@ -317,7 +316,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         leftButton.frame = CGRect(x: 8, y: (height - 32) / 2, width: 32, height: 32)
         leftButton.addTarget(self, action: #selector(scrollLeft), for: .touchUpInside)
         staticSliderView.addSubview(leftButton)
-
+        
         // Add right arrow
         let rightButton = UIButton(type: .custom)
         rightButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
@@ -335,7 +334,7 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         let newOffset = max(currentOffset - width, 0)
         scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: true)
     }
-
+    
     @objc func scrollRight() {
         guard let scrollView = staticSliderView.viewWithTag(999) as? UIScrollView else { return }
         let currentOffset = scrollView.contentOffset.x
@@ -344,21 +343,21 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         let newOffset = min(currentOffset + width, maxOffset)
         scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: true)
     }
-
-
-
-
+    
+    
+    
+    
     private var didSetupStaticSlider = false
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         if !didSetupStaticSlider {
             setupStaticSliderView()
             didSetupStaticSlider = true
         }
     }
-
+    
     @objc func staticBannerTapped(_ gesture: UITapGestureRecognizer) {
         guard let index = gesture.view?.tag, index < staticBanners.count else { return }
         let banner = staticBanners[index]
@@ -368,14 +367,14 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             present(safariVC, animated: true, completion: nil)
         }
     }
-
+    
     
     @objc func phoneNumberClickMethod() {
         if let phoneURL = URL(string: "tel://888-520-5400"),
            UIApplication.shared.canOpenURL(phoneURL) {
             UIApplication.shared.open(phoneURL, options: [:], completionHandler: nil)
         }
-
+        
     }
     
     @objc func sendEmail() {
@@ -383,16 +382,16 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
-
+        
     }
-
+    
     // Delegate method
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult,
                                error: Error?) {
         controller.dismiss(animated: true)
     }
-
+    
     
     @IBAction func facebookActions(_ sender : Any)
     {
@@ -442,41 +441,41 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         
     }
     
-     
+    
     func fetchBannerList() {
-            guard let url = URL(string: "https://demo4.evirtualservices.net/jbgapp/services/index") else { return }
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            let body = "action=bannerlist"
-            request.httpBody = body.data(using: .utf8)
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
-            URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
-                guard let self = self, let data = data, error == nil else { return }
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                       let dataArray = json["data"] as? [[String: Any]] {
-                        
-                        print(dataArray as Any)
-
-                        self.banners = dataArray.compactMap { dict in
-                            guard let img = dict["image"] as? String,
-                                  let title = dict["name"] as? String,
-                                  let desc = dict["description"] as? String,
-                                  let link = dict["link"] as? String else { return nil }
-                            return BannerModel(imageUrl: img, title: title, description: desc, link: link)
-                        }
-                        DispatchQueue.main.async {
-                            self.setupSliderScrollView()
-                            self.startAutoScroll()
-                        }
+        guard let url = URL(string: "https://demo4.evirtualservices.net/jbgapp/services/index") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let body = "action=bannerlist"
+        request.httpBody = body.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            guard let self = self, let data = data, error == nil else { return }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let dataArray = json["data"] as? [[String: Any]] {
+                    
+                    print(dataArray as Any)
+                    
+                    self.banners = dataArray.compactMap { dict in
+                        guard let img = dict["image"] as? String,
+                              let title = dict["name"] as? String,
+                              let desc = dict["description"] as? String,
+                              let link = dict["link"] as? String else { return nil }
+                        return BannerModel(imageUrl: img, title: title, description: desc, link: link)
                     }
-                } catch {
-                    print("Error parsing banner JSON")
+                    DispatchQueue.main.async {
+                        self.setupSliderScrollView()
+                        self.startAutoScroll()
+                    }
                 }
-            }.resume()
-        }
-
+            } catch {
+                print("Error parsing banner JSON")
+            }
+        }.resume()
+    }
+    
     func setupSliderScrollView() {
         scrollView = UIScrollView(frame: sliderView.bounds)
         scrollView.isPagingEnabled = true
@@ -484,19 +483,19 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         scrollView.clipsToBounds = true
         scrollView.layer.cornerRadius = 8
         sliderView.addSubview(scrollView)
-
+        
         let width = sliderView.frame.width
         let height = sliderView.frame.height
-
+        
         for (index, banner) in banners.enumerated() {
             let container = UIView(frame: CGRect(x: CGFloat(index) * width, y: 0, width: width, height: height))
             container.clipsToBounds = true
-
+            
             // 1. Banner Image
             let imageView = UIImageView(frame: container.bounds)
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
-
+            
             if let url = URL(string: banner.imageUrl) {
                 URLSession.shared.dataTask(with: url) { data, _, _ in
                     if let data = data {
@@ -506,27 +505,27 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
                     }
                 }.resume()
             }
-
+            
             container.addSubview(imageView)
-
+            
             // 2. Black overlay container
             let overlayHeight: CGFloat = 100
             let overlayView = UIView(frame: CGRect(x: 0, y: height - overlayHeight, width: width, height: overlayHeight))
             overlayView.backgroundColor = UIColor.black
-
+            
             // 3. Title label
             let titleLabel = UILabel(frame: CGRect(x: 10, y: 8, width: width - 20, height: 22))
             titleLabel.text = banner.title
             titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
             titleLabel.textColor = .white
-
+            
             // 4. Description label
             let descLabel = UILabel(frame: CGRect(x: 10, y: 32, width: width - 20, height: 34))
             descLabel.text = banner.description
             descLabel.font = UIFont.systemFont(ofSize: 13)
             descLabel.textColor = .white
             descLabel.numberOfLines = 2
-
+            
             // 5. Read more button
             let readMoreButton = UIButton(frame: CGRect(x: 10, y: 66, width: 120, height: 28))
             readMoreButton.setTitle("READ MORE", for: .normal)
@@ -535,14 +534,14 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             readMoreButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             readMoreButton.tag = index
             readMoreButton.addTarget(self, action: #selector(readMoreTapped(_:)), for: .touchUpInside)
-
+            
             overlayView.addSubview(titleLabel)
             overlayView.addSubview(descLabel)
             overlayView.addSubview(readMoreButton)
             container.addSubview(overlayView)
             scrollView.addSubview(container)
         }
-
+        
         scrollView.contentSize = CGSize(width: CGFloat(banners.count) * width, height: height)
     }
     @objc func readMoreTapped(_ sender: UIButton) {
@@ -553,28 +552,28 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
             present(safariVC, animated: true, completion: nil)
         }
     }
-
-        @objc func bannerTapped(_ gesture: UITapGestureRecognizer) {
-            guard let index = gesture.view?.tag, index < banners.count else { return }
-            let banner = banners[index]
-            if let url = URL(string: banner.link) {
-                let safariVC = SFSafariViewController(url: url)
-                safariVC.modalPresentationStyle = .overFullScreen
-                present(safariVC, animated: true, completion: nil)
-            }
+    
+    @objc func bannerTapped(_ gesture: UITapGestureRecognizer) {
+        guard let index = gesture.view?.tag, index < banners.count else { return }
+        let banner = banners[index]
+        if let url = URL(string: banner.link) {
+            let safariVC = SFSafariViewController(url: url)
+            safariVC.modalPresentationStyle = .overFullScreen
+            present(safariVC, animated: true, completion: nil)
         }
-
-        func startAutoScroll() {
-            bannerTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(scrollBanner), userInfo: nil, repeats: true)
-        }
-
-        @objc func scrollBanner() {
-            guard banners.count > 1 else { return }
-            currentIndex = (currentIndex + 1) % banners.count
-            let width = scrollView.frame.width
-            let offsetX = CGFloat(currentIndex) * width
-            scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
-        }
+    }
+    
+    func startAutoScroll() {
+        bannerTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(scrollBanner), userInfo: nil, repeats: true)
+    }
+    
+    @objc func scrollBanner() {
+        guard banners.count > 1 else { return }
+        currentIndex = (currentIndex + 1) % banners.count
+        let width = scrollView.frame.width
+        let offsetX = CGFloat(currentIndex) * width
+        scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+    }
     
     func setUpLsitData(){
         //var dashboardTitle = ["Parenting","Aging","Balancing","Thriving","Working","Living"]
@@ -604,7 +603,6 @@ class Dashbaord: UIViewController, MFMailComposeViewControllerDelegate
         present(menu, animated: true, completion: nil)
     }
 }
-
 
 extension Dashbaord: UICollectionViewDelegate {
     

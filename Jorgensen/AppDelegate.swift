@@ -1,47 +1,66 @@
-//
-//  AppDelegate.swift
-//  Jorgensen
-//
-//  Created by Apple on 03/09/20.
-//  Copyright © 2020 Apple. All rights reserved.
-//
-
 import UIKit
 import Firebase
+import UserNotifications
+import FirebaseMessaging
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate
-{
-   var window: UIWindow?
-   var viewController: ViewController?
-   var navigationController: UINavigationController?
-   
-   
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
-   {
-        // Override point for customization after application launch.
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+
+    var window: UIWindow?
+
+    // ✅ Called when app starts
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
-        application.statusBarStyle = .lightContent
-        CustomProgressViewController.setupProgressWindow()
- 
+
+        UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = self
+
+        // ✅ Ask for permission
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { granted, error in
+            if granted {
+                print("✅ Notification permission granted")
+            } else {
+                print("❌ Notification permission denied")
+            }
+        }
+
+        application.registerForRemoteNotifications()
         return true
-    
     }
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    // ✅ Called when APNs assigns device token
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
     }
 
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    // ✅ Called when Firebase generates or refreshes FCM token
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("📲 FCM Token: \(fcmToken ?? "nil")")
+        // Save/send to backend if needed
+        UserDefaults.standard.set(fcmToken, forKey: "fcm_token")
     }
 
+    // ✅ Show push in FOREGROUND
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+        print("📩 Foreground notification: \(userInfo)")
 
+        // show banner even if app is open
+        completionHandler([.alert, .badge, .sound])
+    }
+
+    // ✅ Called when user taps notification (app in background/killed)
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        print("📬 Notification tapped (background/killed): \(userInfo)")
+
+        // TODO: Handle routing based on payload if needed
+        completionHandler()
+    }
 }
 

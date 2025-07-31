@@ -69,6 +69,8 @@ class Parenting: BaseViewController {
                     do {
 
                         let json : NSDictionary? = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
+                        
+                        print(json)
 
                        
                         guard let parseJSON = json else {
@@ -81,20 +83,14 @@ class Parenting: BaseViewController {
                         DispatchQueue.main.async() {
                             
                             let tempArr = parseJSON["content"] as? NSArray
-                            if(tempArr!.count == 0)
-                            {
+                            if(tempArr!.count == 0) {
                                 self.sipagingEnable = false
-                            }
-                            else
-                            {
+                            } else {
                                 self.arrTitle .addObjects(from: tempArr as! [Any]) as? NSMutableArray
                                 
                             }
-                              
                             self.tbleView.reloadData()
-                            
                         }
-
 
                     } catch
                     {

@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import IHProgressHUD
+import FirebaseMessaging
 
 class EmpolyeViewController: UIViewController, UITextFieldDelegate {
     
@@ -185,8 +186,8 @@ class EmpolyeViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    func loadMessages()
-    {
+    func loadMessages() {
+        
         IHProgressHUD.show(withStatus: "Please wait...")
         let url = URL(string: "https://script.google.com/macros/s/AKfycbyAz8p2wjn4IR7kF7-WAZdFYumXxSOOWrvCdxB7LknLyjkaeiVk/exec")!
         
@@ -207,13 +208,147 @@ class EmpolyeViewController: UIViewController, UITextFieldDelegate {
         
         AF.request(url,method: .post, parameters: body,encoding:URLEncoding.queryString, headers: headers).responseJSON { response in
             debugPrint(response)
+            
+            Messaging.messaging().token { token, error in
+                if let error = error {
+                    print("❌ Error fetching FCM token: \(error)")
+                    self.registerUser(
+                        email: self.emailTextField.text!,
+                        fullName: self.firstNameTextField.text!+" "+self.lastNameTextField.text!,
+                        contactNumber: self.phoneTextField.text!,
+                        device: "iOS",
+                        deviceToken: ""
+                    )
+                } else if let token = token {
+                    
+                    print("📲 Manual FCM token: \(token)")
+                    self.registerUser(
+                        email: self.emailTextField.text!,
+                        fullName: self.firstNameTextField.text!+" "+self.lastNameTextField.text!,
+                        contactNumber: self.phoneTextField.text!,
+                        device: "iOS",
+                        deviceToken: token
+                    )
+                    
+                }
+            }
+            
+
+            
+            /*IHProgressHUD.dismiss()
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EnterPasswordId") as? EnterPassword
+            self.navigationController?.pushViewController(push!, animated: true)*/
+        }
+        
+    }
+    
+    func registerUser(email: String, fullName: String, contactNumber: String, device: String, deviceToken: String) {
+        guard let url = URL(string: "https://demo4.evirtualservices.net/jbgapp/services/index") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        let params = [
+            "action": "registration",
+            "email": email,
+            "fullName": fullName,
+            "contactNumber": contactNumber,
+            "device": device,
+            "deviceToken": deviceToken
+        ]
+
+        let bodyString = params.map { "\($0.key)=\($0.value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")" }
+            .joined(separator: "&")
+
+        request.httpBody = bodyString.data(using: .utf8)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data, error == nil else {
+                DispatchQueue.main.async {
+                    self.showAlert(title: "Error", message: error?.localizedDescription ?? "Unknown error")
+                }
+                return
+            }
+
+            do {
+                if let responseJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    print("Registration response: \(responseJSON)")
+
+                    let status = (responseJSON["status"] as? String ?? "").lowercased()
+                    let message = responseJSON["msg"] as? String ?? "Something went wrong"
+
+                    DispatchQueue.main.async {
+                        if status == "fails" {
+                            // Specific failure message
+                            IHProgressHUD.dismiss()
+                            self.showAlert(title: "Registration Failed", message: message)
+                        } else if status == "success" {
+                            IHProgressHUD.dismiss()
+                            // self.showAlert(title: "Success", message: message)
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EnterPasswordId") as? EnterPassword
+                            self.navigationController?.pushViewController(push!, animated: true)
+                        } else {
+                            IHProgressHUD.dismiss()
+                            self.showAlert(title: "Error", message: "Unexpected server response.")
+                        }
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.showAlert(title: "Error", message: "Failed to parse server response.")
+                }
+            }
+        }.resume()
+    }
+
+
+
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
+    }
+
+
+
+    
+    /*func updateToken(email: String, fullName: String, contactNumber: String, device: String, deviceToken: String) {
+        
+        IHProgressHUD.show(withStatus: "Please wait...")
+        let url = URL(string: "https://demo4.evirtualservices.net/jbgapp/services/index")!
+        
+//        let headers: HTTPHeaders = [
+//            "Authorization": "Info XXX",
+//            "Accept": "application/json",
+//            "Content-Type" :"application/json"
+//        ]
+        
+//        action: registration
+//            email:    fullName:
+//            contactNumber:
+//            device:
+//            deviceToken:
+        
+        let body: [String: Any] = [
+            "action": "registration",
+            "fullName": String(fullName),
+            "contactNumber": String(contactNumber),
+            "email": String(email),
+            "device": String(device),
+            "deviceToken": String(deviceToken),
+        ]
+        
+        print(body)
+        
+        AF.request(url,method: .post, parameters: body,encoding:URLEncoding.queryString).responseJSON { response in
+            debugPrint(response)
             IHProgressHUD.dismiss()
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EnterPasswordId") as? EnterPassword
             self.navigationController?.pushViewController(push!, animated: true)
         }
         
-    }
-    
+    }*/
     
     /*
      // MARK: - Navigation

@@ -24,4 +24,5 @@ pod 'SDWebImage'
 pod 'SideMenu'
 pod 'IHProgressHUD', :git => 'https://github.com/Swiftify-Corp/IHProgressHUD.git'
 pod 'Firebase/Analytics'
+pod 'Firebase/Messaging'
 end

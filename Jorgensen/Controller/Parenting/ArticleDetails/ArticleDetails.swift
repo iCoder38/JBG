@@ -9,9 +9,9 @@
 import UIKit
 import WebKit;
 
-class ArticleDetails: UIViewController {
+class ArticleDetails: UIViewController, WKNavigationDelegate {
     
- var dictdetail:NSDictionary?
+    var dictdetail:NSDictionary?
     
     // MARK:- CUSTOM NAVIGATION BAR -
     @IBOutlet weak var navigationBar:UIView! {
@@ -19,7 +19,7 @@ class ArticleDetails: UIViewController {
             navigationBar.backgroundColor = NAVIGATION_BACKGROUND_COLOR
         }
     }
-
+    
     @IBOutlet weak var viewUnderNavigation:UIView! {
         didSet {
             viewUnderNavigation.backgroundColor = APP_BUTTON_COLOR
@@ -89,11 +89,11 @@ class ArticleDetails: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-       
-//        let attr = try? NSAttributedString(htmlString: htmlString, font: UIFont.systemFont(ofSize: 34, weight: .regular))
-//
-//        txtView.attributedText = htmlString.htmlToAttributedString
-//
+        
+        //        let attr = try? NSAttributedString(htmlString: htmlString, font: UIFont.systemFont(ofSize: 34, weight: .regular))
+        //
+        //        txtView.attributedText = htmlString.htmlToAttributedString
+        //
         loadHTMLStringImage()
         
         
@@ -113,15 +113,43 @@ class ArticleDetails: UIViewController {
         }
     }
     
-    func loadHTMLStringImage() -> Void {
-        
-        let htmlString = self.dictdetail!["body_combine"] as? String ?? ""
-           webView.navigationDelegate = self as? WKNavigationDelegate
-           webView.loadHTMLString(htmlString, baseURL: nil)
-//
-     
+    func loadHTMLStringImage() {
+        let rawHTML = self.dictdetail?["body_combine"] as? String ?? ""
+
+        let styledHTML = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+            <style>
+                body {
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 16px;
+                    color: #000;
+                    padding: 12px;
+                    line-height: 1.6;
+                }
+                h2 {
+                    font-size: 20px;
+                    margin-top: 24px;
+                    margin-bottom: 12px;
+                }
+                p {
+                    margin-bottom: 12px;
+                }
+            </style>
+        </head>
+        <body>
+            \(rawHTML)
+        </body>
+        </html>
+        """
+
+        webView.navigationDelegate = self // Optional if you want delegate
+        webView.loadHTMLString(styledHTML, baseURL: nil)
     }
-    
+
     
     @objc func sideBarMenuClick() {
         let userDefault = UserDefaults.standard
@@ -130,7 +158,7 @@ class ArticleDetails: UIViewController {
         
         if revealViewController() != nil {
             btnBack.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
-               
+            
             revealViewController().rearViewRevealWidth = 300
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
@@ -142,9 +170,7 @@ class ArticleDetails: UIViewController {
     }
 }
 
-
 extension NSAttributedString {
-
     convenience init(htmlString html: String, font: UIFont? = nil, useDocumentFontSize: Bool = true) throws {
         let options: [NSAttributedString.DocumentReadingOptionKey : Any] = [
             .documentType: NSAttributedString.DocumentType.html,
